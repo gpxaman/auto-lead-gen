@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$comment": "STATUS: DERIVED_CANONICAL_SCHEMA. Structure synthesized from docs/requirements/conflicts.md's own per-conflict template (Source A/B, context, resolution, decision_status) -- that template is itself SOURCE-adjacent project documentation, not from the original PDF. See docs/contracts/conflict.md.",
+  "title": "Conflict",
+  "version": "v0.1-DRAFT",
+  "type": "object",
+  "required": ["conflict_id", "subject", "status", "participants"],
+  "properties": {
+    "conflict_id": { "type": "string", "$comment": "SOURCE_SCHEMA for the 7 seed values (CONFLICT-001..007)" },
+    "subject": { "type": "string" },
+    "status": { "type": "string", "enum": ["OPEN", "UNDER_REVIEW", "RESOLVED", "SUPERSEDED", "UNRESOLVED"] },
+    "resolution": { "type": ["string", "null"] },
+    "resolver": { "type": ["string", "null"] },
+    "resolved_at": { "type": ["string", "null"], "format": "date-time" },
+    "participants": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["side", "context"],
+        "properties": {
+          "side": { "type": "string", "enum": ["A", "B"] },
+          "source_id": { "type": ["string", "null"] },
+          "claim_id": { "type": ["string", "null"], "format": "uuid" },
+          "context": { "type": "string" }
+        }
+      }
+    }
+  }
+}

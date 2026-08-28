@@ -1,0 +1,32 @@
+{
+  "_fixture_meta": {
+    "synthetic": true,
+    "purpose": "Validates worker/agent_state append-only history: a worker's full lifecycle (spawn -> active -> quarantine -> replace) must remain queryable, never collapsed to only the latest state.",
+    "no_real_client_data": true
+  },
+  "worker": {
+    "worker_id": "worker-synthetic-001",
+    "agent_instance_id": "ai-synthetic-platformworker-001",
+    "platform_id": "synthetic_platform"
+  },
+  "worker_states": [
+    { "agent_state_id": "as-0001", "agent_instance_id": "ai-synthetic-platformworker-001", "status": "SPAWNED", "recorded_at": "2026-08-05T09:00:00Z" },
+    { "agent_state_id": "as-0002", "agent_instance_id": "ai-synthetic-platformworker-001", "status": "ACTIVE", "recorded_at": "2026-08-05T09:00:05Z" },
+    { "agent_state_id": "as-0003", "agent_instance_id": "ai-synthetic-platformworker-001", "status": "DEGRADED", "drift_score": 0.6, "recorded_at": "2026-08-05T11:50:00Z" },
+    { "agent_state_id": "as-0004", "agent_instance_id": "ai-synthetic-platformworker-001", "status": "QUARANTINED", "drift_score": 0.91, "recorded_at": "2026-08-05T12:00:00Z" },
+    { "agent_state_id": "as-0005", "agent_instance_id": "ai-synthetic-platformworker-001", "status": "REPLACED", "recorded_at": "2026-08-05T12:00:02Z" }
+  ],
+  "worker_lifecycle_events": [
+    { "event_id": "wle-0001", "worker_id": "worker-synthetic-001", "from_status": null, "to_status": "SPAWNED", "trigger": "SPAWN_THRESHOLD", "timestamp": "2026-08-05T09:00:00Z" },
+    { "event_id": "wle-0002", "worker_id": "worker-synthetic-001", "from_status": "SPAWNED", "to_status": "ACTIVE", "trigger": "ACTIVATION", "timestamp": "2026-08-05T09:00:05Z" },
+    { "event_id": "wle-0003", "worker_id": "worker-synthetic-001", "from_status": "ACTIVE", "to_status": "QUARANTINED", "trigger": "SENTINEL_QUARANTINE", "timestamp": "2026-08-05T12:00:00Z" },
+    { "event_id": "wle-0004", "worker_id": "worker-synthetic-001", "from_status": "QUARANTINED", "to_status": "REPLACED", "trigger": "HOT_SWAP_REPLACEMENT", "timestamp": "2026-08-05T12:00:02Z" }
+  ],
+  "worker_checkpoint": {
+    "worker_id": "worker-synthetic-001",
+    "checkpoint_data": { "task_state": "3 leads in queue, mid-classification", "configuration_state": { "config_version": 1 } },
+    "trust_classification": "TASK_STATE",
+    "_fixture_note": "Only TASK_STATE/CONFIGURATION_STATE-tagged checkpoint data is eligible for migration to the replacement worker (ADR-0006). This fixture deliberately omits any MODEL_INFERENCE/FAILED_OUTPUT content from the checkpoint to demonstrate correct filtering.",
+    "created_at": "2026-08-05T12:00:01Z"
+  }
+}

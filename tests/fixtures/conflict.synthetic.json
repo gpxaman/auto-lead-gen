@@ -1,0 +1,29 @@
+{
+  "_fixture_meta": {
+    "synthetic": true,
+    "purpose": "Validates the conflict model: two claims disagreeing about the same subject, preserved as a first-class conflict record with both sides intact, neither overwritten.",
+    "no_real_client_data": true
+  },
+  "conflicts": [
+    {
+      "conflict_id": "CONFLICT-SYNTHETIC-001",
+      "subject": "Manufacturing domain classification disagreement for lead-0001",
+      "status": "OPEN",
+      "resolution": null,
+      "resolver": null,
+      "resolved_at": null,
+      "participants": [
+        {
+          "side": "A",
+          "claim_id": "cl-0001-0000-0000-0000-000000000001",
+          "context": "gpt-family classifier assigned DFM_INJECTION_MOLDING with confidence 0.82"
+        },
+        {
+          "side": "B",
+          "claim_id": "cl-0002-0000-0000-0000-000000000002",
+          "context": "claude-family classifier assigned FULL_NPD_TURNKEY with confidence 0.55"
+        }
+      ]
+    }
+  ]
+}

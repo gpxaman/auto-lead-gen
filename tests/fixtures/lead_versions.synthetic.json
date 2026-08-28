@@ -1,0 +1,94 @@
+{
+  "_fixture_meta": {
+    "synthetic": true,
+    "purpose": "Validates lead versioning (append-only, first observation never overwritten) AND schema-version coexistence (SCHEMA-002/003/005 shapes stored side by side without merging, per CONFLICT-003).",
+    "no_real_client_data": true
+  },
+  "lead": {
+    "lead_id": "lead-0001-0000-0000-0000-000000000001",
+    "first_observed_at": "2026-08-01T10:00:00Z",
+    "latest_lead_version_id": "lv-0003-0000-0000-0000-000000000003"
+  },
+  "lead_versions": [
+    {
+      "lead_version_id": "lv-0001-0000-0000-0000-000000000001",
+      "lead_id": "lead-0001-0000-0000-0000-000000000001",
+      "schema_id": "SCHEMA-002",
+      "observed_at": "2026-08-01T10:00:00Z",
+      "source_record_ids": ["rr-0001-0000-0000-0000-000000000001"],
+      "payload": {
+        "lead_metadata": {
+          "source_platform": "synthetic_platform",
+          "source_url": "https://example-synthetic-platform.test/listing/42",
+          "extraction_timestamp": "2026-08-01T10:00:00Z",
+          "client_archetype": "Middleman_Reseller"
+        },
+        "project_scope": {
+          "title": "Need CAD + injection mold DFM review, ABS enclosure, 10k units",
+          "required_cad_software": ["SolidWorks"],
+          "target_manufacturing_process": "Plastic_Injection_Molding_ABS",
+          "project_maturity_stage": "Concept_CAD_Needs_DFM"
+        },
+        "commercial_parameters": { "target_production_volume": 10000 }
+      },
+      "_fixture_note": "FIRST observation. Must never be edited or deleted by later versions."
+    },
+    {
+      "lead_version_id": "lv-0002-0000-0000-0000-000000000002",
+      "lead_id": "lead-0001-0000-0000-0000-000000000001",
+      "schema_id": "SCHEMA-003",
+      "observed_at": "2026-08-02T09:00:00Z",
+      "source_record_ids": ["rr-0001-0000-0000-0000-000000000001"],
+      "payload": {
+        "lead_id": "lead-0001-0000-0000-0000-000000000001",
+        "layer_origin": {
+          "client_archetype": "Middleman_Reseller",
+          "macro_channel_type": "FREELANCE",
+          "platform_id": "synthetic_platform"
+        },
+        "technical_fingerprint": {
+          "manufacturing_domain": "DFM_TOOLING",
+          "target_production_volume": 10000
+        }
+      },
+      "_fixture_note": "SECOND observation, a DIFFERENT schema shape (v1). Coexists with lv-0001 rather than replacing it."
+    },
+    {
+      "lead_version_id": "lv-0003-0000-0000-0000-000000000003",
+      "lead_id": "lead-0001-0000-0000-0000-000000000001",
+      "schema_id": "SCHEMA-005",
+      "observed_at": "2026-08-03T14:00:00Z",
+      "source_record_ids": ["rr-0001-0000-0000-0000-000000000001"],
+      "payload": {
+        "lead_id": "lead-0001-0000-0000-0000-000000000001",
+        "timestamp_utc": "2026-08-03T14:00:00Z",
+        "client_archetype": "MIDDLEMAN_OEM_RESIGN",
+        "source_metadata": {
+          "macro_channel": "FREELANCE",
+          "platform_name": "synthetic_platform",
+          "sub_domain": "n/a",
+          "listing_url": "https://example-synthetic-platform.test/listing/42"
+        },
+        "technical_specifications": {
+          "domain": "DFM_TOOLING",
+          "cad_software": ["SolidWorks"],
+          "materials_requested": ["ABS"],
+          "bounding_box_mm": { "x": 200, "y": 150, "z": 80 }
+        },
+        "commercial_assessment": {
+          "estimated_market_price_usd": 5000,
+          "target_bid_price_usd": 4500,
+          "estimated_cogs_usd": 800,
+          "projected_margin_percent": 82.2
+        },
+        "security_analysis": {
+          "contains_anti_bot_trap": false,
+          "required_verification_keyword": null,
+          "is_prompt_injection": false,
+          "sanitized_text_payload": "Need CAD + injection mold DFM review, ABS enclosure, 10k units"
+        }
+      },
+      "_fixture_note": "THIRD observation, schema v2 shape. All three lead_versions remain queryable -- 'latest' is a pointer, not a destructive replacement."
+    }
+  ]
+}

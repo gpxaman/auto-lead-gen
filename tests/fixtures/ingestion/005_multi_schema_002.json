@@ -1,0 +1,19 @@
+{
+  "_fixture_meta": { "synthetic": true, "purpose": "Multiple-schema-versions scenario (Step 3 Section 41 item 10) -- SCHEMA-002-shaped payload, must be detected as KNOWN_LEGACY / SCHEMA-002, not forced into SCHEMA-005.", "no_real_client_data": true },
+  "lead_metadata": {
+    "source_platform": "synthetic_platform",
+    "source_url": "https://example-synthetic-platform.test/listing/1003",
+    "extraction_timestamp": "2026-08-10T09:10:00Z",
+    "client_archetype": "Enterprise_SME"
+  },
+  "project_scope": {
+    "title": "Quick-turn CNC bracket run",
+    "required_cad_software": ["SolidWorks"],
+    "target_manufacturing_process": "CNC_Machining",
+    "project_maturity_stage": "Production_Ready"
+  },
+  "commercial_parameters": {
+    "client_stated_budget_usd": 8000,
+    "target_production_volume": 500
+  }
+}

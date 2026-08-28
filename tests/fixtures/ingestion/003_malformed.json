@@ -1,0 +1,2 @@
+_fixture_meta: synthetic=true, purpose="Malformed-payload scenario (Step 3 Section 41 item 5) -- this file is deliberately NOT valid JSON despite living among JSON-ish fixtures, to test that malformed content is preserved as raw text rather than discarded."
+{ this is not valid json: [unterminated, "quote, missing braces

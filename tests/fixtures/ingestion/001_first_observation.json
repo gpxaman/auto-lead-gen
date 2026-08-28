@@ -1,0 +1,30 @@
+{
+  "_fixture_meta": { "synthetic": true, "purpose": "First-observation scenario (Step 3 Section 41 item 1); SCHEMA-005-shaped payload, matching docs/contracts/schemas/lead.v1.schema.json's SCHEMA-005 branch.", "no_real_client_data": true },
+  "lead_id": "synthetic-lead-0001",
+  "timestamp_utc": "2026-08-10T09:00:00Z",
+  "client_archetype": "NPD_INNOVATOR",
+  "source_metadata": {
+    "macro_channel": "FREELANCE",
+    "platform_name": "synthetic_platform",
+    "sub_domain": "n/a",
+    "listing_url": "https://example-synthetic-platform.test/listing/1001"
+  },
+  "technical_specifications": {
+    "domain": "PROTOTYPING_3D_PRINT",
+    "cad_software": ["Fusion_360"],
+    "materials_requested": ["PLA"],
+    "bounding_box_mm": { "x": 100, "y": 100, "z": 50 }
+  },
+  "commercial_assessment": {
+    "estimated_market_price_usd": 3000,
+    "target_bid_price_usd": 2700,
+    "estimated_cogs_usd": 400,
+    "projected_margin_percent": 85.2
+  },
+  "security_analysis": {
+    "contains_anti_bot_trap": false,
+    "required_verification_keyword": null,
+    "is_prompt_injection": false,
+    "sanitized_text_payload": "Need a 3D printed enclosure prototype for a synthetic test device."
+  }
+}

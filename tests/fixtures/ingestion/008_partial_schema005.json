@@ -1,0 +1,12 @@
+{
+  "_fixture_meta": { "synthetic": true, "purpose": "Partial-schema scenario -- has SOME but not all SCHEMA-005 required top-level fields, must be detected as schema_status=PARTIAL, never silently upgraded to KNOWN.", "no_real_client_data": true },
+  "lead_id": "synthetic-lead-0008",
+  "timestamp_utc": "2026-08-10T09:20:00Z",
+  "client_archetype": "SME_ENGINEERING_OVERFLOW",
+  "source_metadata": {
+    "macro_channel": "B2B_DIRECTORY",
+    "platform_name": "synthetic_platform",
+    "sub_domain": "n/a",
+    "listing_url": "https://example-synthetic-platform.test/listing/1008"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$comment": "STATUS: PROPOSED_SCHEMA. No SRC-XXXXXX names 'claim' as a standalone entity; this formalizes behavior implied across SRC-000010/011/034 and docs/architecture/data-lineage.md. See docs/contracts/claim.md.",
+  "title": "Claim",
+  "version": "v0.1-DRAFT",
+  "type": "object",
+  "required": ["claim_id", "subject_type", "subject_id", "predicate", "value", "claim_type", "trust_level", "status", "created_at", "updated_at"],
+  "properties": {
+    "claim_id": { "type": "string", "format": "uuid" },
+    "subject_type": { "type": "string" },
+    "subject_id": { "type": "string", "format": "uuid" },
+    "predicate": { "type": "string" },
+    "value": {},
+    "claim_type": { "type": "string", "enum": ["CLASSIFICATION", "SCORE", "STATUS", "FACT"] },
+    "source_record_ids": { "type": "array", "items": { "type": "string", "format": "uuid" }, "default": [] },
+    "confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+    "trust_level": {
+      "type": "string",
+      "enum": ["RAW_SOURCE", "RAW_EXTERNAL", "OBSERVED", "MODEL_INFERENCE", "UNVERIFIED_CLAIM", "EVIDENCE_BACKED_CLAIM", "VERIFIED", "DERIVED", "HUMAN_DECISION", "SYSTEM_DECISION", "QUARANTINED", "REJECTED"]
+    },
+    "status": { "type": "string", "enum": ["ACTIVE", "SUPERSEDED", "REJECTED", "EXPIRED"] },
+    "derivation_method": { "type": ["string", "null"] },
+    "model_version_id": { "type": ["string", "null"], "format": "uuid" },
+    "prompt_version_id": { "type": ["string", "null"], "format": "uuid" },
+    "configuration_version_id": { "type": ["string", "null"], "format": "uuid" },
+    "agent_instance_id": { "type": ["string", "null"], "format": "uuid" },
+    "task_id": { "type": ["string", "null"], "format": "uuid" },
+    "valid_from": { "type": ["string", "null"], "format": "date-time" },
+    "valid_until": { "type": ["string", "null"], "format": "date-time" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "$comment_transitions": "trust_level MUST NOT transition MODEL_INFERENCE -> VERIFIED directly. See docs/database/integrity-rules.md state-transition table. This constraint is documented, not enforceable by JSON Schema alone -- application-layer enforcement required."
+}

@@ -1,0 +1,13 @@
+{
+  "_fixture_meta": { "synthetic": true, "purpose": "Multiple-schema-versions scenario (Step 3 Section 41 item 10) -- SCHEMA-003-shaped payload, must be detected as KNOWN_LEGACY / SCHEMA-003.", "no_real_client_data": true },
+  "lead_id": "synthetic-lead-0006",
+  "layer_origin": {
+    "client_archetype": "Crowdfunder",
+    "macro_channel_type": "OUTBOUND_SIGNAL",
+    "platform_id": "synthetic_platform"
+  },
+  "technical_fingerprint": {
+    "manufacturing_domain": "DFM_INJECTION_MOLDING",
+    "target_production_volume": 20000
+  }
+}

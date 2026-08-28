@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$comment": "STATUS: DERIVED_CANONICAL_SCHEMA. Not a source-provided schema -- defined fresh in Step 3 Section 25 to carry infrastructure metadata (identity, source, connector, timestamps, content metadata, hash, raw payload reference, schema metadata, security metadata, provenance, correlation) around a raw payload WITHOUT altering that payload. Per Step 3 Section 24: COMMON ENVELOPE + SOURCE-SPECIFIC PAYLOAD -- this schema defines the envelope only; the source-specific payload inside it is intentionally unconstrained ({}) since forcing one shape on it would violate the 'no universal JSON shape' rule.",
+  "title": "IngestionEnvelope",
+  "version": "v0.1-DRAFT",
+  "type": "object",
+  "required": [
+    "ingestion_item_id", "ingestion_run_id", "source_id", "received_at", "observed_at",
+    "content_type", "content_hash", "security_status", "schema_status", "duplicate_status"
+  ],
+  "properties": {
+    "ingestion_item_id": { "type": "string" },
+    "ingestion_run_id": { "type": "string" },
+    "source_id": { "type": "string" },
+    "connector_id": { "type": ["string", "null"] },
+    "connector_version": { "type": ["string", "null"] },
+    "received_at": { "type": "string", "format": "date-time" },
+    "observed_at": { "type": "string", "format": "date-time" },
+    "content_type": { "type": "string" },
+    "content_hash": {
+      "type": "object",
+      "required": ["algorithm", "hash", "input_representation"],
+      "properties": {
+        "algorithm": { "type": "string" },
+        "hash": { "type": "string" },
+        "input_representation": { "type": "string" }
+      }
+    },
+    "raw_record_id": { "type": ["string", "null"], "$comment": "reference only -- the raw payload itself lives in the raw_record store, never duplicated into this envelope" },
+    "schema_detection": {
+      "type": ["object", "null"],
+      "properties": {
+        "schema_name": { "type": ["string", "null"] },
+        "schema_version": { "type": ["string", "null"] },
+        "schema_status": { "type": "string", "enum": ["KNOWN", "KNOWN_LEGACY", "KNOWN_FUTURE", "UNKNOWN", "INVALID", "PARTIAL"] }
+      }
+    },
+    "security_status": { "type": "string", "enum": ["UNSCREENED", "SAFE", "SUSPICIOUS", "MALICIOUS", "UNKNOWN"] },
+    "schema_status": { "type": "string", "enum": ["KNOWN", "KNOWN_LEGACY", "KNOWN_FUTURE", "UNKNOWN", "INVALID", "PARTIAL"] },
+    "duplicate_status": { "type": "string", "enum": ["DISTINCT_RECORD", "EXACT_DUPLICATE", "POSSIBLE_DUPLICATE"] },
+    "correlation_id": { "type": ["string", "null"] },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "configuration_version": { "type": ["string", "null"] },
+        "connector_version": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

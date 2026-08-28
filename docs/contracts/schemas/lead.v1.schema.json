@@ -1,0 +1,164 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$comment": "STATUS: DERIVED_CANONICAL_SCHEMA (wrapper). Does NOT canonicalize a single lead shape — see CONFLICT-003 and docs/architecture/open-decisions.md #2. The three nested payload schemas (schema002Payload, schema003Payload, schema005Payload) are each tagged SOURCE_SCHEMA and are preserved VERBATIM from docs/source-extraction/json-schemas.md. This wrapper only adds a discriminator (schema_id) and provenance envelope fields, none of which exist in any single source schema.",
+  "title": "LeadRecord",
+  "version": "v0.1-DRAFT",
+  "type": "object",
+  "required": ["lead_version_id", "lead_id", "schema_id", "observed_at", "payload"],
+  "properties": {
+    "lead_version_id": { "type": "string", "format": "uuid", "$comment": "PROPOSED_SCHEMA" },
+    "lead_id": { "type": "string", "format": "uuid", "$comment": "PROPOSED_SCHEMA" },
+    "schema_id": {
+      "type": "string",
+      "enum": ["SCHEMA-002", "SCHEMA-003", "SCHEMA-005"],
+      "$comment": "DERIVED_CANONICAL_SCHEMA discriminator; declares which SOURCE_SCHEMA payload shape follows"
+    },
+    "observed_at": { "type": "string", "format": "date-time", "$comment": "PROPOSED_SCHEMA" },
+    "source_record_ids": { "type": "array", "items": { "type": "string" }, "$comment": "PROPOSED_SCHEMA" },
+    "trust_level": {
+      "type": "string",
+      "enum": ["RAW_SOURCE", "RAW_EXTERNAL", "OBSERVED", "MODEL_INFERENCE", "UNVERIFIED_CLAIM", "EVIDENCE_BACKED_CLAIM", "VERIFIED", "DERIVED", "HUMAN_DECISION", "SYSTEM_DECISION", "QUARANTINED", "REJECTED"],
+      "$comment": "PROPOSED_SCHEMA, see docs/database/logical-data-model.md"
+    },
+    "payload": {
+      "oneOf": [
+        {
+          "$comment": "SOURCE_SCHEMA — SCHEMA-002, page 10-11, SRC-000032. Example-instance shape, narrative not formal JSON Schema in the source; typed here for structural validation only. 'required': [lead_metadata] added only to disambiguate this oneOf branch from SCHEMA-003/005 during validation — SCHEMA-002's own narrative example does not declare required fields.",
+          "type": "object",
+          "required": ["lead_metadata"],
+          "properties": {
+            "lead_metadata": {
+              "type": "object",
+              "properties": {
+                "source_platform": { "type": "string" },
+                "source_url": { "type": "string" },
+                "extraction_timestamp": { "type": "string" },
+                "client_archetype": { "type": "string", "enum": ["NPD_Innovator", "Middleman_Reseller", "Enterprise_SME", "Crowdfunder"] }
+              }
+            },
+            "project_scope": {
+              "type": "object",
+              "properties": {
+                "title": { "type": "string" },
+                "domain_focus": { "type": "array", "items": { "type": "string" } },
+                "required_cad_software": { "type": "array", "items": { "type": "string" } },
+                "target_manufacturing_process": { "type": "string" },
+                "project_maturity_stage": { "type": "string" },
+                "deliverables_demanded": { "type": "array", "items": { "type": "string" } }
+              }
+            },
+            "commercial_parameters": {
+              "type": "object",
+              "properties": {
+                "client_stated_budget_usd": { "type": "number" },
+                "target_production_volume": { "type": "integer" },
+                "target_unit_target_cost_usd": { "type": "number" },
+                "geographic_destination": { "type": "string" }
+              }
+            },
+            "strategic_qualification": {
+              "type": "object",
+              "properties": {
+                "budget_feasibility_score": { "type": "number" },
+                "iechm_capability_match": { "type": "boolean" },
+                "identified_pain_point": { "type": "string" },
+                "recommended_pitch_angle": { "type": "string" }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "SOURCE_SCHEMA — SCHEMA-003, page 14, SRC-000040. Unified Lead Entity Data Schema v1. 'required': [layer_origin] added only to disambiguate this oneOf branch during validation.",
+          "type": "object",
+          "required": ["layer_origin"],
+          "properties": {
+            "lead_id": { "type": "string" },
+            "layer_origin": {
+              "type": "object",
+              "properties": {
+                "client_archetype": { "type": "string", "enum": ["NPD_Innovator", "Middleman_Reseller", "Enterprise_SME", "Crowdfunder", "Institutional"] },
+                "macro_channel_type": { "type": "string", "enum": ["FREELANCE", "B2B_DIRECTORY", "COMMUNITY_FORUM", "BROKERAGE", "OUTBOUND_SIGNAL"] },
+                "platform_id": { "type": "string" },
+                "sub_domain_id": { "type": "string" }
+              }
+            },
+            "technical_fingerprint": {
+              "type": "object",
+              "properties": {
+                "cad_tooling_required": { "type": "array", "items": { "type": "string" } },
+                "manufacturing_domain": { "type": "string", "enum": ["MECHANICAL", "PCB_ELECTRONICS", "ENCLOSURE", "DFM_TOOLING", "TURNKEY_MFG"] },
+                "target_production_volume": { "type": ["integer", "null"] },
+                "stated_budget_usd": { "type": ["number", "null"] },
+                "verification_artifacts": { "type": "array", "items": { "type": "string", "enum": ["URL_PROOF", "API_PAYLOAD", "LISTING_HASH"] } }
+              }
+            },
+            "runtime_governance": {
+              "type": "object",
+              "properties": {
+                "responsible_worker_id": { "type": "string" },
+                "worker_model_family": { "type": "string" },
+                "auditor_validation_status": { "type": "string", "enum": ["VERIFIED", "QUARANTINED", "REJECTED"] },
+                "drift_score_at_intake": { "type": "number" }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "SOURCE_SCHEMA — SCHEMA-005, page 29, SRC-000080. Formal JSON Schema draft-07 in the source itself; the client_archetype/macro_channel/domain enums below are TRUNCATED exactly as in the original render — no missing values are invented.",
+          "type": "object",
+          "required": ["lead_id", "timestamp_utc", "client_archetype", "source_metadata", "technical_specifications", "commercial_assessment", "security_analysis"],
+          "properties": {
+            "lead_id": { "type": "string", "format": "uuid" },
+            "timestamp_utc": { "type": "string", "format": "date-time" },
+            "client_archetype": {
+              "type": "string",
+              "enum": ["NPD_INNOVATOR", "MIDDLEMAN_OEM_RESIGN", "SME_ENGINEERING_OVERFLOW", "CROWDFUNDER_FUNDED"],
+              "$comment": "SOURCE_INCOMPLETE: source enum list is cut off after a 5th value beginning 'GOVERNMEN...' which is not recoverable from the source as supplied."
+            },
+            "source_metadata": {
+              "type": "object",
+              "required": ["macro_channel", "platform_name", "sub_domain", "listing_url"],
+              "properties": {
+                "macro_channel": { "type": "string", "$comment": "SOURCE_INCOMPLETE: enum truncated after 'OUTBOUND_...' in source" },
+                "platform_name": { "type": "string" },
+                "sub_domain": { "type": "string" },
+                "listing_url": { "type": "string", "format": "uri" }
+              }
+            },
+            "technical_specifications": {
+              "type": "object",
+              "required": ["domain", "cad_software", "materials_requested", "bounding_box_mm"],
+              "properties": {
+                "domain": { "type": "string", "$comment": "SOURCE_INCOMPLETE: enum truncated after 'TUR...' in source" },
+                "cad_software": { "type": "array", "items": { "type": "string" } },
+                "materials_requested": { "type": "array", "items": { "type": "string" } },
+                "bounding_box_mm": { "type": "object", "properties": { "x": { "type": "number" }, "y": { "type": "number" }, "z": { "type": "number" } } },
+                "file_attachments": { "type": "array", "items": { "type": "string", "format": "uri" } }
+              }
+            },
+            "commercial_assessment": {
+              "type": "object",
+              "properties": {
+                "client_stated_budget_usd": { "type": ["number", "null"] },
+                "estimated_market_price_usd": { "type": "number" },
+                "target_bid_price_usd": { "type": "number" },
+                "estimated_cogs_usd": { "type": "number" },
+                "projected_margin_percent": { "type": "number" }
+              }
+            },
+            "security_analysis": {
+              "type": "object",
+              "required": ["contains_anti_bot_trap", "is_prompt_injection", "sanitized_text_payload"],
+              "properties": {
+                "contains_anti_bot_trap": { "type": "boolean" },
+                "required_verification_keyword": { "type": ["string", "null"] },
+                "is_prompt_injection": { "type": "boolean" },
+                "sanitized_text_payload": { "type": "string" }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

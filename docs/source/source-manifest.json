@@ -1,0 +1,25 @@
+{
+  "document_name": "Autonomous Freelance Agent Factory Architecture.pdf",
+  "document_source_url": "https://gemini.google.com/app/f8dc46d6099d59ae",
+  "document_type": "Gemini AI chat conversation export (browser print-to-PDF)",
+  "pdf_footer_timestamp": "8/25/26, 5:26 PM",
+  "page_count": 29,
+  "page_count_verified_by": "explicit per-page footer markers \"N/29\" present on every page, cross-checked against the 29 distinct document_content blocks supplied inline in this conversation",
+  "sha256": null,
+  "sha256_status": "NOT_COMPUTABLE — the raw PDF binary was never provided to this extraction process as a file. The document was supplied inline in the conversation as pre-rendered, page-segmented text/markdown content (via the platform's document-attachment mechanism), not as file bytes on disk. Per Step 0 instructions, a hash cannot be fabricated. If the user places the original .pdf file at docs/source/Autonomous Freelance Agent Factory Architecture.pdf, this manifest should be regenerated with a real `sha256sum` computation.",
+  "file_size_bytes": null,
+  "file_size_status": "NOT_AVAILABLE — see sha256_status.",
+  "binary_file_present_on_disk": false,
+  "binary_file_expected_path": "docs/source/Autonomous Freelance Agent Factory Architecture.pdf",
+  "extraction_source": "Full inline text content of all 29 pages, as supplied directly in the user's message to this session (rendered by the platform's document viewer/OCR layer prior to reaching this session).",
+  "extraction_fidelity_notes": [
+    "Text content (headings, paragraphs, prose, user prompts, AI responses) is preserved at high fidelity, believed complete for all 29 pages.",
+    "Tables, JSON blocks, Python code blocks, and Markdown-fenced 'system prompt' blocks are preserved verbatim where the original PDF's browser-print rendering did not itself truncate them.",
+    "The original PDF's own rendering process (a browser print-to-PDF of a long chat page) cut off numerous lines mid-sentence inside fenced code blocks (system prompts) — these are NOT extraction losses; they are genuine gaps in the source PDF as supplied. Every such instance is marked inline as \"[truncated in source render]\" in docs/source-extraction/pages/*.md.",
+    "ASCII-art architecture diagrams are preserved as best-effort plain-text reproductions of what was visually rendered; exact box-drawing character alignment may differ slightly from the original PDF's rendering, though the diagram content/structure is preserved.",
+    "No images/screenshots were present in the source beyond text and ASCII diagrams; none were therefore lost."
+  ],
+  "processed_at": "2026-08-28",
+  "processing_status": "COMPLETE_FROM_AVAILABLE_TEXT — all 29 pages processed and archived; binary-level verification (hash, exact byte reproduction, embedded-image extraction) is not possible without the source .pdf file on disk.",
+  "recommended_followup": "If bit-for-bit provenance verification is required, the user should place the original PDF file at the expected path above; this session will then compute and backfill sha256/file_size_bytes."
+}

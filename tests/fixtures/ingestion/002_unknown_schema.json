@@ -1,0 +1,8 @@
+{
+  "_fixture_meta": { "synthetic": true, "purpose": "Unknown-schema scenario (Step 3 Section 41 item 4): a well-formed JSON object matching none of SCHEMA-002/003/005's discriminator fields.", "no_real_client_data": true },
+  "some_future_platform_format": {
+    "widget_request": "custom aluminum bracket, qty 500",
+    "contact_channel": "synthetic-only"
+  },
+  "note": "This object is intentionally shaped like nothing IECHM-LIOS currently recognizes -- must be preserved with schema_status=UNKNOWN, never discarded."
+}

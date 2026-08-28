@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$comment": "STATUS: DERIVED_CANONICAL_SCHEMA wrapper around SOURCE_SCHEMA field content. Seed data = SCENARIO-001..008 from docs/source-extraction/economic-scenarios.md, plus the two scale profiles from docs/architecture/scaling-scenarios.md. No scenario is ever merged with another -- see docs/contracts/scenario.md.",
+  "title": "Scenario",
+  "version": "v0.1-DRAFT",
+  "type": "object",
+  "required": ["scenario_id", "scenario_type", "context", "status"],
+  "properties": {
+    "scenario_id": { "type": "string", "$comment": "SOURCE_SCHEMA for the 8 seed values" },
+    "scenario_name": { "type": ["string", "null"] },
+    "scenario_type": { "type": "string", "enum": ["COST_PROJECTION", "PROFITABILITY", "SCALE_PROFILE", "CONVERSION_FUNNEL"] },
+    "source_ids": { "type": "array", "items": { "type": "string" } },
+    "assumption_ids": { "type": "array", "items": { "type": "string" } },
+    "inputs": { "type": "object" },
+    "formula_id": { "type": ["string", "null"] },
+    "outputs": { "type": "object" },
+    "economics": {
+      "type": "object",
+      "properties": {
+        "raw_volume": {},
+        "filter_rate": {},
+        "qualified_volume": {},
+        "bid_volume": {},
+        "win_rate": {},
+        "close_rate": {},
+        "AOV": {},
+        "revenue": {},
+        "margin": {},
+        "cost": {},
+        "profit": {}
+      },
+      "$comment": "Exact Step 2 Section 17 field list. Types intentionally left unconstrained ({}) because different scenarios express these as absolute dollar figures, percentages, or ranges -- forcing one type would misrepresent the source's own varied precision."
+    },
+    "context": { "type": "string" },
+    "status": { "type": "string", "enum": ["ILLUSTRATIVE", "VALIDATED"], "default": "ILLUSTRATIVE" },
+    "version": { "type": ["string", "null"] }
+  }
+}

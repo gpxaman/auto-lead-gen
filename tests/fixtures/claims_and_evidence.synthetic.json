@@ -1,0 +1,106 @@
+{
+  "_fixture_meta": {
+    "synthetic": true,
+    "purpose": "Validates: provenance chain, evidence attachment, verification (incl. a FAILED attempt that must NOT be deleted), and two CONFLICTING claims about the same subject that must both persist rather than one overwriting the other.",
+    "no_real_client_data": true
+  },
+  "raw_records": [
+    {
+      "record_id": "rr-0001-0000-0000-0000-000000000001",
+      "source_system": "synthetic_platform",
+      "source_identifier": "listing-42",
+      "retrieved_at": "2026-08-01T10:00:00Z",
+      "observed_at": "2026-08-01T10:00:00Z",
+      "raw_payload": { "title": "Need CAD + injection mold DFM review, ABS enclosure, 10k units" },
+      "content_type": "text/plain",
+      "content_hash": "sha256-fixture-hash-0001",
+      "source_url": "https://example-synthetic-platform.test/listing/42",
+      "connector_version": "synthetic-connector-v1",
+      "security_status": "SCREENED_CLEAN",
+      "supersedes_raw_record_id": null
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "cl-0001-0000-0000-0000-000000000001",
+      "subject_type": "lead",
+      "subject_id": "lead-0001-0000-0000-0000-000000000001",
+      "predicate": "manufacturing_domain",
+      "value": "DFM_INJECTION_MOLDING",
+      "claim_type": "CLASSIFICATION",
+      "source_record_ids": ["rr-0001-0000-0000-0000-000000000001"],
+      "confidence": 0.82,
+      "trust_level": "MODEL_INFERENCE",
+      "status": "ACTIVE",
+      "derivation_method": "LLM_CLASSIFICATION",
+      "model_version_id": "mv-synthetic-gpt",
+      "prompt_version_id": "pv-synthetic-classifier-1",
+      "agent_instance_id": "ai-synthetic-classifier-1",
+      "task_id": "task-synthetic-0001",
+      "created_at": "2026-08-01T10:05:00Z",
+      "updated_at": "2026-08-01T10:05:00Z"
+    },
+    {
+      "claim_id": "cl-0002-0000-0000-0000-000000000002",
+      "subject_type": "lead",
+      "subject_id": "lead-0001-0000-0000-0000-000000000001",
+      "predicate": "manufacturing_domain",
+      "value": "FULL_NPD_TURNKEY",
+      "claim_type": "CLASSIFICATION",
+      "source_record_ids": ["rr-0001-0000-0000-0000-000000000001"],
+      "confidence": 0.55,
+      "trust_level": "MODEL_INFERENCE",
+      "status": "ACTIVE",
+      "derivation_method": "LLM_CLASSIFICATION",
+      "model_version_id": "mv-synthetic-claude",
+      "prompt_version_id": "pv-synthetic-classifier-2",
+      "agent_instance_id": "ai-synthetic-classifier-2",
+      "task_id": "task-synthetic-0002",
+      "created_at": "2026-08-01T10:06:00Z",
+      "updated_at": "2026-08-01T10:06:00Z",
+      "_fixture_note": "Intentionally CONFLICTS with cl-0001 (different manufacturing_domain for the same subject). Both rows must persist -- see conflict.synthetic.json which links them."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev-0001-0000-0000-0000-000000000001",
+      "source_record_id": "rr-0001-0000-0000-0000-000000000001",
+      "source_url": "https://example-synthetic-platform.test/listing/42",
+      "retrieved_at": "2026-08-01T10:00:00Z",
+      "content_hash": "sha256-fixture-hash-0001",
+      "evidence_type": "LISTING_HASH",
+      "verification_status_cache": "FAILED",
+      "confidence": 0.9,
+      "created_at": "2026-08-01T10:00:05Z"
+    }
+  ],
+  "claim_evidence_links": [
+    { "claim_id": "cl-0001-0000-0000-0000-000000000001", "evidence_id": "ev-0001-0000-0000-0000-000000000001" }
+  ],
+  "verifications": [
+    {
+      "verification_id": "vf-0001-0000-0000-0000-000000000001",
+      "claim_id": "cl-0001-0000-0000-0000-000000000001",
+      "method": "URL_RESOLUTION_CHECK",
+      "verifier_agent_instance_id": "ai-synthetic-sentinel-1",
+      "verification_timestamp": "2026-08-01T10:10:00Z",
+      "result": "FAILED",
+      "confidence": 0.1,
+      "notes": "Synthetic fixture: URL returned 404 at check time.",
+      "status": "ACTIVE",
+      "_fixture_note": "Must NOT be deleted even though it failed -- Step 2 Section 14."
+    },
+    {
+      "verification_id": "vf-0002-0000-0000-0000-000000000002",
+      "claim_id": "cl-0001-0000-0000-0000-000000000001",
+      "method": "URL_RESOLUTION_CHECK",
+      "verifier_agent_instance_id": "ai-synthetic-sentinel-1",
+      "verification_timestamp": "2026-08-01T11:10:00Z",
+      "result": "VERIFIED",
+      "confidence": 0.95,
+      "notes": "Synthetic fixture: retry succeeded, URL resolved and content matched.",
+      "status": "ACTIVE",
+      "_fixture_note": "A SECOND, separate verification row -- does not overwrite vf-0001."
+    }
+  ]
+}

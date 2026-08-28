@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$comment": "STATUS: DERIVED_CANONICAL_SCHEMA wrapper. Does NOT canonicalize a single archetype set -- see CONFLICT-004 and docs/architecture/open-decisions.md #4. client_archetype_set is an open enum; client_archetype_value must be a value literally present in the declared set's SOURCE_SCHEMA enumeration (see docs/source-extraction/client-archetypes.md). See docs/contracts/client.md.",
+  "title": "ClientClassification",
+  "version": "v0.1-DRAFT",
+  "type": "object",
+  "required": ["client_id", "client_archetype_set", "client_archetype_value", "classification_claim_id"],
+  "properties": {
+    "client_id": { "type": "string", "format": "uuid" },
+    "client_archetype_set": {
+      "type": "string",
+      "enum": ["SOURCE_SET_A", "SOURCE_SET_B", "SOURCE_SET_C"],
+      "$comment": "Open enum -- new sets (e.g. a future user-approved canonical union) may be ADDED, existing values never removed."
+    },
+    "client_archetype_value": {
+      "type": "string",
+      "$comment": "SOURCE_SCHEMA -- must match a value literally present in the declared set. Set A (3): 'NPD Innovator / Deep-Tech Startup', 'E-Commerce Brand / Middleman / Sourcing Arbitrageur', 'Overburdened SME / Mid-Market Engineering Team'. Sets B/C (5 each) are truncated in source -- see docs/source-extraction/client-archetypes.md Pass 2/3 for the exact partial text."
+    },
+    "buyer_persona": { "type": ["string", "null"], "$comment": "SOURCE_SCHEMA, Set A only" },
+    "buying_motivation": { "type": ["string", "null"], "$comment": "SOURCE_SCHEMA, Set A only" },
+    "pain_point": { "type": ["string", "null"], "$comment": "SOURCE_SCHEMA, Set A only" },
+    "buying_signal": { "type": ["string", "null"], "$comment": "SOURCE_SCHEMA, from TABLE-003" },
+    "classification_claim_id": { "type": "string", "format": "uuid", "$comment": "DERIVED_CANONICAL_SCHEMA -- points to the claim record establishing trust for this assignment" }
+  }
+}

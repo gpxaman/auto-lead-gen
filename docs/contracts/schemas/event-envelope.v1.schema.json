@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$comment": "STATUS: DERIVED_CANONICAL_SCHEMA. Synthesizes the envelope shape implied by SCHEMA-004 (v1, FAILOVER_HOTSWAP_TRIGGERED) and SCHEMA-006 (v2, FAILOVER_HOTSWAP_DISPATCHED) -- see CONFLICT-003, both preserved as distinct valid event_type/payload combinations, neither is 'the' canonical hotswap event. See docs/contracts/event.md.",
+  "title": "EventEnvelope",
+  "version": "v0.1-DRAFT",
+  "type": "object",
+  "required": ["event_id", "event_type", "event_version", "aggregate_type", "aggregate_id", "producer", "timestamp", "payload", "security_classification"],
+  "properties": {
+    "event_id": { "type": "string", "format": "uuid" },
+    "event_type": {
+      "type": "string",
+      "$comment": "Open enum. SOURCE_SCHEMA values: CEASE_OPERATIONS, FAILOVER_HOTSWAP_TRIGGERED, FAILOVER_HOTSWAP_DISPATCHED, CHANNEL_DATA_SATURATED_IDLE_ACTIVE, EVENT_CONTRACT_SIGNED. PROPOSED_SCHEMA values: see docs/architecture/events.md's 10 newly-proposed events."
+    },
+    "event_version": { "type": "string" },
+    "aggregate_type": { "type": "string" },
+    "aggregate_id": { "type": "string", "format": "uuid" },
+    "producer": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "correlation_id": { "type": ["string", "null"], "format": "uuid" },
+    "causation_id": { "type": ["string", "null"], "format": "uuid" },
+    "payload": { "type": "object" },
+    "payload_schema_version": { "type": ["string", "null"] },
+    "security_classification": { "type": "string", "enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "SENSITIVE", "SECRET"] },
+    "idempotency_key": { "type": ["string", "null"] }
+  },
+  "$comment_immutability": "Per Step 2 Section 27: events are immutable after creation. No update endpoint/mutation path should ever accept an event_id that already exists."
+}

@@ -1,0 +1,59 @@
+{
+  "_fixture_meta": {
+    "synthetic": true,
+    "purpose": "Validates event immutability, idempotency-key deduplication, and that a correction is emitted as a NEW event (via causation_id) rather than a rewrite of history.",
+    "no_real_client_data": true
+  },
+  "events": [
+    {
+      "event_id": "evt-0001-0000-0000-0000-000000000001",
+      "event_type": "CEASE_OPERATIONS",
+      "event_version": "1.0",
+      "aggregate_type": "worker",
+      "aggregate_id": "worker-synthetic-001",
+      "producer": "sentinel-synthetic-001",
+      "timestamp": "2026-08-05T12:00:00Z",
+      "correlation_id": "corr-synthetic-001",
+      "causation_id": null,
+      "payload": { "reason": "drift_score 0.91 >= threshold 0.85" },
+      "payload_schema_version": "1.0",
+      "security_classification": "INTERNAL",
+      "idempotency_key": "cease-ops-worker-synthetic-001-2026-08-05T12:00:00Z"
+    },
+    {
+      "event_id": "evt-0002-0000-0000-0000-000000000002",
+      "event_type": "CEASE_OPERATIONS",
+      "event_version": "1.0",
+      "aggregate_type": "worker",
+      "aggregate_id": "worker-synthetic-001",
+      "producer": "sentinel-synthetic-001",
+      "timestamp": "2026-08-05T12:00:00Z",
+      "correlation_id": "corr-synthetic-001",
+      "causation_id": null,
+      "payload": { "reason": "drift_score 0.91 >= threshold 0.85" },
+      "payload_schema_version": "1.0",
+      "security_classification": "INTERNAL",
+      "idempotency_key": "cease-ops-worker-synthetic-001-2026-08-05T12:00:00Z",
+      "_fixture_note": "DUPLICATE idempotency_key of evt-0001, simulating an at-least-once delivery retry. A validator/consumer must treat this as a no-op duplicate, not a second real event."
+    },
+    {
+      "event_id": "evt-0003-0000-0000-0000-000000000003",
+      "event_type": "FAILOVER_HOTSWAP_DISPATCHED",
+      "event_version": "2.0",
+      "aggregate_type": "worker",
+      "aggregate_id": "worker-synthetic-001",
+      "producer": "hotswap-engine-synthetic",
+      "timestamp": "2026-08-05T12:00:02Z",
+      "correlation_id": "corr-synthetic-001",
+      "causation_id": "evt-0001-0000-0000-0000-000000000001",
+      "payload": {
+        "anomaly_report": { "faulty_worker_id": "worker-synthetic-001", "drift_score": 0.91, "consecutive_failures": 3 },
+        "failover_execution": { "quarantined_node_pinned_to_admin": true, "spawned_replacement_node_id": "worker-synthetic-001-fallback" }
+      },
+      "payload_schema_version": "2.0",
+      "security_classification": "INTERNAL",
+      "idempotency_key": "hotswap-dispatch-worker-synthetic-001-attempt-1",
+      "_fixture_note": "A CAUSED event (causation_id points back to evt-0001), demonstrating causal chaining -- not a mutation of evt-0001."
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$comment": "STATUS: DERIVED_CANONICAL_SCHEMA. evidence_type enum values URL_PROOF/API_PAYLOAD/LISTING_HASH are SOURCE_SCHEMA (verbatim from SCHEMA-003's verification_artifacts, SRC-000040); SCREENSHOT/SNAPSHOT are PROPOSED_SCHEMA additions absent from the source. See docs/contracts/evidence.md.",
+  "title": "Evidence",
+  "version": "v0.1-DRAFT",
+  "type": "object",
+  "required": ["evidence_id", "evidence_type", "created_at"],
+  "properties": {
+    "evidence_id": { "type": "string", "format": "uuid" },
+    "source_record_id": { "type": ["string", "null"], "format": "uuid" },
+    "source_url": { "type": ["string", "null"], "format": "uri" },
+    "retrieved_at": { "type": ["string", "null"], "format": "date-time" },
+    "observed_at": { "type": ["string", "null"], "format": "date-time" },
+    "content_hash": { "type": ["string", "null"] },
+    "evidence_type": {
+      "type": "string",
+      "enum": ["URL_PROOF", "API_PAYLOAD", "LISTING_HASH", "SCREENSHOT", "SNAPSHOT"]
+    },
+    "snapshot_reference": { "type": ["string", "null"] },
+    "verification_status_cache": { "type": ["string", "null"], "enum": ["VERIFIED", "PARTIALLY_VERIFIED", "UNVERIFIED", "CONTRADICTED", "FAILED", "EXPIRED", null] },
+    "confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}
